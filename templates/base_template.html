@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photoscore</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"
+    />
+    <link
+      href="https://transloadit.edgly.net/releases/uppy/v1.16.1/uppy.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/c5d35f1490.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <nav
+      class="navbar is-primary"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
+        <a class="navbar-item subtitle is-3" href="/">
+          <i class="fas fa-camera-retro fa-lg mr-4 ml-1"></i> Photoscore
+        </a>
+      </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+    <!-- Load FilePond library -->
+    <script src="https://transloadit.edgly.net/releases/uppy/v1.16.1/uppy.min.js"></script>
+    <script>
+      const target = document.getElementById("drag-drop-area");
+      if (target) {
+        const XHRUpload = Uppy.XHRUpload;
+        var uppy = Uppy.Core()
+          .use(Uppy.Dashboard, {
+            inline: true,
+            target: "#drag-drop-area",
+            method: "post",
+            formData: true,
+            restrictions: {
+              allowedFileTypes : ['image/*', '.jpg', '.jpeg', '.png']
+            }
+          })
+          .use(XHRUpload, {
+            endpoint: "/",
+          });
+
+        uppy.on("complete", (result) => {
+          let results = document.getElementById("results");
+          for (const iterator of result.successful) {
+            let card = document.createElement("div");
+            card.classList.add("card");
+            card.classList.add("my-4");
+            card.innerHTML = ` 
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img src="${iterator.preview}" alt="Placeholder image">
+            </figure>
+          </div>
+          <div class="card-content">
+          <p class="has-text-centered has-text-weight-bold is-size-3">Score: ${parseFloat(iterator.response.body).toFixed(2)}</p> 
+          </div>`;
+            results.appendChild(card);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

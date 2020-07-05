@@ -1,0 +1,25 @@
+{% extends "base_template.html" %} {% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+      Photoscore
+    </h1>
+    <p class="subtitle">
+      Instagram photo score powered by
+      <strong class="has-text-primary">AI</strong>
+    </p>
+    <form action="/" method="POST">
+      <!-- We'll transform this input into a pond -->
+      <div id="drag-drop-area"></div>
+    </form>
+    <div class="columns mt-4">
+      <div class="column is-one-third-desktop">
+        <div class="box">
+          <p><strong>The results will be showed here</strong></p>
+          <div id="results"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
